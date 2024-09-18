@@ -22,12 +22,12 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Set ELECTRON_MIRROR environment variable
         run: |
           echo "ELECTRON_MIRROR=https://github.com/riscv-forks/electron-riscv-releases/releases/download/" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Build the project
         run: pnpm run dist
