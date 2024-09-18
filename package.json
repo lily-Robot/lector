@@ -5,6 +5,8 @@
     "description": "A simple PDF Reader",
     "main": "src/js/main.js",
     "scripts": {
+        "clean": "rm -rf pnpm-lock.yaml && rm -rf node_modules",
+        "pnpm-clean": "pnpm run clean",
         "start": "electron .",
         "pack": "electron-builder --dir",
         "dist": "electron-builder",
@@ -12,16 +14,12 @@
     },
     "author": "Sagar Gurtu",
     "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/sagargurtu/lector.git"
-    },
     "dependencies": {
-        "custom-electron-titlebar": "^3.0.9"
+        "@electron/remote": "^2.1.2", 
+        "custom-electron-titlebar": "^4.2.8"
     },
     "devDependencies": {
-        "custom-electron-titlebar": "^3.0.9",
-        "electron": "^5.0.4",
+        "electron": "^30.5.0",
         "electron-builder": "^21.1.1"
     },
     "build": {
@@ -30,12 +28,30 @@
         "copyright": "Copyright (c) 2019 Sagar Gurtu",
         "buildVersion": "1.1.0",
         "win": {
-            "target": "NSIS",
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32",
+                        "arm64"
+                    ]
+                }
+            ],
             "icon": "./src/assets/icons/win/icon.ico",
             "fileAssociations": {
                 "ext": "pdf",
                 "icon": "./src/assets/icons/win/file.ico"
             }
+        },
+        "linux": {
+            "target": [
+                "AppImage",
+                "deb",
+                "rpm"
+            ],
+            "category": "Utility",
+            "icon": "./src/assets/icons/linux"
         },
         "nsis": {
             "artifactName": "${productName}Setup.${ext}",
