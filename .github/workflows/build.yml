@@ -1,0 +1,61 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'  
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Set ELECTRON_MIRROR environment variable
+        run: |
+          echo "ELECTRON_MIRROR=https://github.com/riscv-forks/electron-riscv-releases/releases/download/v" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build the project
+        run: pnpm run dist
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: lector
+          path: dist/**/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: lector
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist/**/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "v1.1.0"
+          releaseName: "Lector v1.1.0"
+          body: "Auto-generated release from GitHub Actions"
+          draft: false
+          prerelease: false
+
