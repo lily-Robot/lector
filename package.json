@@ -12,15 +12,18 @@
         "dist": "electron-builder",
         "postinstall": "electron-builder install-app-deps"
     },
-    "author": "Sagar Gurtu",
+    "author": {
+        "name": "Sagar Gurtu",
+        "email": "your-email@example.com"
+    },
     "license": "MIT",
     "dependencies": {
-        "@electron/remote": "^2.1.2", 
+        "@electron/remote": "^2.1.2",
         "custom-electron-titlebar": "^4.2.8"
     },
     "devDependencies": {
-        "electron": "^30.5.0",
-        "electron-builder": "^21.1.1"
+        "@riscv-forks/electron-builder": "^24.10.0",
+        "electron": "^32.1.0"
     },
     "build": {
         "appId": "lector",
@@ -46,9 +49,29 @@
         },
         "linux": {
             "target": [
-                "AppImage",
-                "deb",
-                "rpm"
+                {
+                    "target": "AppImage",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "deb",
+                    "arch": [
+                        "riscv64",
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "rpm",
+                    "arch": [
+                        "riscv64",
+                        "x64",
+                        "arm64"
+                    ]
+                }
             ],
             "category": "Utility",
             "icon": "./src/assets/icons/linux"
